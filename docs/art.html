@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width,initial-scale=1">
+ <title>Art</title>
+ <script >
+// ability to add bubbles for next 
+// flashing lights? 
+// transition from image to text on black when zooming to the view?
+// 
+var coordArray = [
+  // y x yb xr
+  [ 0,  0, // full
+    640,400],
+  [ 30, 40, // star of david
+    200,50
+  ],
+  [ 30, 90, // candles
+    200,40
+  ],
+  [ 30, 130, // tree angel and gifts .. could split
+    250,60
+  ],
+  [ -10, 195, // gingerbread house 
+    130,115
+  ],
+  [ 95, 170, // godzilla
+    225,200
+  ],
+
+  [ 500, 25, // stars
+    110,55
+  ],
+  [ 300, 45, // moosesleigh
+    200,80
+  ],
+  [ 500, 75, // snowflakes
+    110,100
+  ],
+  [ 300, 125, // menhora
+    200,75
+  ],
+  [ 475, 170, // candycanes
+    160,150
+  ],
+  [ 305, 205, // snowman
+    155, 175
+  ],
+  [ 430, 325,
+    60,35
+  ],
+  [ 450, 325,
+    60, 40
+  ],
+  [ 470, 325,
+    60, 40
+  ],
+  [ 500, 325,
+    50, 40
+  ],
+  [ 520, 325,
+    60, 40
+  ],
+  [ 550, 325,
+    60, 40
+  ],
+  [ 580, 325,
+    60, 40
+  ],
+  [ 580, 350,
+    60, 40
+  ],
+  [ 0,  0, // full
+    640,400],
+
+];
+var curLoc = 0;
+function setSvgView(coords){
+  var x = coords[0];
+  var y = coords[1];
+  var rx = coords[2];
+  var ry = coords[3];
+  var coordString = `${x} ${y} ${rx} ${ry}`;
+  console.log(coordString);
+
+  var svg = document.getElementById('mainSvg');
+  
+  const animator = svg.querySelector('animate');
+  
+  var fromString = animator.getAttribute('to');
+  if(fromString) animator.setAttribute('from', fromString); 
+
+  animator.setAttribute('to', coordString); 
+  animator.beginElement(); 
+
+}
+
+function leftarrow(){
+  curLoc = curLoc > 0 ? curLoc - 1 : curLoc;
+  setSvgView(coordArray[curLoc]);
+}
+
+function rightarrow(){
+  curLoc = curLoc + 1 < coordArray.length ? curLoc + 1 : curLoc;
+  setSvgView(coordArray[curLoc]);
+}
+
+ </script>
+ 
+  <style>
+   html,
+   body{ 
+     height:100%;
+    }
+   body{
+     background:#000;
+     display:block; 
+     align-items:left;
+     justify-content:left;
+     font-family:Arial,Helvetica,sans-serif
+   }
+
+ </style>
+</head>
+<body>
+  <!-- define the whole html to be an svg -->
+  <svg id="mainSvg" viewBox="0 0 640 400" preserveAspectRatio="none" style="width:100%;height:400px" >
+    <animate attributeName="viewBox" dur="0.5s" fill="freeze" restart="always" />
+    <use href="./xmas lights-FINAL.svg"></use>
+  </svg>
+<button id="leftarrow" onclick="leftarrow();"> &leftarrow;</button>
+<button id="rightarrow" onclick="rightarrow();""> &rightarrow;</button>
+
+</body>
+</html>
