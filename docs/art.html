@@ -8,7 +8,8 @@
 // ability to add bubbles for next 
 // flashing lights? 
 // transition from image to text on black when zooming to the view?
-// 
+// could do white ***** along the text paths as a backlight with blur effects applied there vs the actual text
+
 var coordArray = [
   //  x y w h
   [ 0,  0, // full
@@ -77,9 +78,6 @@ var coordArray = [
   [ 580, 350, // 182
     64, 40
   ],
-  [ 0,  0, // back to full
-    640,400],
-
 ];
 var curLoc = 0;
 function setSvgView(coords){
@@ -121,6 +119,9 @@ function enableGlow(){
   var blurEffect = document.getElementById('blurEffectSlow');
   blurEffect.setAttribute('stdDeviation', '6');
 
+  var blurEffect = document.getElementById('blurEffectSteady');
+  blurEffect.setAttribute('stdDeviation', '6');
+
   var svgAnimator = document.getElementById('glowAnimateFast');
   svgAnimator.setAttribute('values', '0; 10; 0');
   svgAnimator.beginElement();
@@ -131,6 +132,10 @@ function enableGlow(){
 
   var svgAnimator = document.getElementById('glowAnimateSlow');
   svgAnimator.setAttribute('values', '0; 10; 0');
+  svgAnimator.beginElement();
+ 
+  var svgAnimator = document.getElementById('glowAnimateSteady');
+  svgAnimator.setAttribute('values', '2; 3; 2');
   svgAnimator.beginElement();
 }
 
@@ -144,6 +149,10 @@ function disableGlow(){
   var blurEffect = document.getElementById('blurEffectSlow');
   blurEffect.setAttribute('stdDeviation', '0');
 
+  var blurEffect = document.getElementById('blurEffectSteady');
+  blurEffect.setAttribute('stdDeviation', '0');
+
+
   var svgAnimator = document.getElementById('glowAnimateFast');
   svgAnimator.setAttribute('values', '0; 0; 0');
   svgAnimator.beginElement(); 
@@ -153,6 +162,10 @@ function disableGlow(){
   svgAnimator.beginElement();
 
   var svgAnimator = document.getElementById('glowAnimateSlow');
+  svgAnimator.setAttribute('values', '0; 0; 0');
+  svgAnimator.beginElement();
+
+  var svgAnimator = document.getElementById('glowAnimateSteady');
   svgAnimator.setAttribute('values', '0; 0; 0');
   svgAnimator.beginElement();
 }
@@ -215,18 +228,32 @@ function disableGlow(){
     stroke: #e5d7d7;
    }
 
-
-  text.strokeClass000000, text.strokeClassff0000, text.strokeClasse0d9d9, text.strokeClasse5d7d7  {
+  text.blueStar1 {
     filter: url(#glowFast);
   }
-  text.strokeClassa8a6a6, text.strokeClassf9f2f2, text.strokeClassa56224
-  {
+  text.blueStar2 {
     filter: url(#glowMedium);
   }
-  text.strokeClassad2a1b, text.strokeClasse07c1f, text.strokeClasse5d7d7, text.strokeClass961515, text.strokeClassccc5c5, text.strokeClass7fff00 {
+
+  text.blueStar3 {
     filter: url(#glowSlow);
   }
 
+
+  text.strokeClassff0000, text.strokeClasse0d9d9, text.strokeClasse5d7d7  {
+    filter: url(#glowSteady);
+  }
+  text.strokeClassa8a6a6, text.strokeClassf9f2f2, text.strokeClassa56224
+  {
+    filter: url(#glowSteady);
+  }
+  text.strokeClassad2a1b, text.strokeClasse07c1f, text.strokeClasse5d7d7, text.strokeClass961515, text.strokeClassccc5c5, text.strokeClass7fff00 {
+    filter: url(#glowSteady);
+  }
+
+  g circle {
+    filter: url(#glowMedium);
+  }
 
  </style>
 </head>
@@ -243,7 +270,7 @@ function disableGlow(){
           id="glowAnimateFast"
           attributeName="stdDeviation" 
           values="0; 10; 0" 
-          dur="1s" 
+          dur="1.5s" 
           repeatCount="indefinite" />
       </feGaussianBlur>
 
@@ -262,7 +289,7 @@ function disableGlow(){
         <animate 
           id="glowAnimateMedium"
           attributeName="stdDeviation" 
-          values="0; 10; 0" 
+          values="1; 3; 1" 
           dur="2.5s" 
           repeatCount="indefinite" />
       </feGaussianBlur>
@@ -283,7 +310,26 @@ function disableGlow(){
           id="glowAnimateSlow"
           attributeName="stdDeviation" 
           values="0; 10; 0" 
-          dur="7s" 
+          dur="4s" 
+          repeatCount="indefinite" />
+      </feGaussianBlur>
+
+      
+      <!-- Merge the blurred glow and the original source graphic -->
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="text" />
+      </feMerge>
+    </filter>
+    <filter id="glowSteady" x="-20%" y="-20%" width="140%" height="140%">
+    <!-- Blur the line -->
+    <!-- I want each text selector to get a glow in and out effect, that can be stopped -->
+      <feGaussianBlur id="blurEffectSteady" stdDeviation="6" result="blur" >
+        <animate 
+          id="glowAnimateSteady"
+          attributeName="stdDeviation" 
+          values="3; 4; 3" 
+          dur="4s" 
           repeatCount="indefinite" />
       </feGaussianBlur>
 
@@ -355,57 +401,59 @@ function disableGlow(){
   <polygon cx="532.14" cy="58.29" shape="star" point="5" r="15.22" radialshift="0" r2="5.07" orient="point" fill="#d1c14f" stroke="#e5bd44" stroke-width="NaN" starRadiusMultiplier="3" points="555.1428833007812,54.06878662109375 557.30029296875,63.16356658935547 565.6150512695312,62.673606872558594 558.6336059570312,67.80453491210938 561.6150512695312,76.59650421142578 555.1428833007812,70.67281341552734 548.6707153320312,76.59650421142578 551.6521606445312,67.80453491210938 544.6707153320312,62.673606872558594 552.9854736328125,63.16356658935547 555.1428833007812,54.06878662109375 557.30029296875,63.16356658935547" id="svg_96"/>
   <polygon cx="532.14" cy="58.29" shape="star" point="5" r="15.22" radialshift="0" r2="5.07" orient="point" fill="#eaea35" stroke="#efef21" stroke-width="NaN" starRadiusMultiplier="3" points="576.6428833007812,36.06878662109375 579.7273559570312,50.411861419677734 591.6150512695312,49.639163970947266 581.6336059570312,57.730979919433594 585.896240234375,71.59650421142578 576.6428833007812,62.25444793701172 567.3895874023438,71.59650421142578 571.6521606445312,57.730979919433594 561.6707153320312,49.639163970947266 573.5584106445312,50.411861419677734 576.6428833007812,36.06878662109375 579.7273559570312,50.411861419677734" id="svg_97"/>
   <line fill="none" stroke="#c930c9" stroke-width="null" stroke-dasharray="2,2" stroke-linejoin="null" stroke-linecap="null" x1="8.14" y1="192.29" x2="243.14" y2="192.29" id="svg_123"/>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" id="svg_34" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="matrix(1 0 0 1 -17 0)">When </text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-67.1474 48.7926 58.0272) matrix(1.03702 0 0 1.4259 -9.4912 -29.4428)" id="svg_41">Pedro</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(62.4742 56.6499 59.0378) matrix(1.03702 0 0 1.4259 -1.63383 -28.4323)" id="svg_42">put</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-1.01755 65.7281 61.0988) matrix(0.781887 0 0 1.4259 21.7836 -26.3267)" id="svg_51">up the</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(0.141038 81.1414 60.0178) matrix(0.846919 0 0 1.29008 33.5485 -19.05)" id="svg_77">abomi</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" id="svg_90" transform="rotate(-60.6968 89.9277 57.1466) matrix(0.846919 0 0 1.29008 42.3282 -21.9212)">nable</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" id="svg_91" transform="rotate(60.011 97.3624 59.1497) matrix(0.846919 0 0 1.29008 49.7695 -19.9181)">snow</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" id="svg_92" transform="rotate(0.48655 105.15 60.0294) matrix(0.846919 0 0 1.29008 57.5501 -19.0384)">man</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(0.48655 116.143 61.0293) matrix(0.846919 0 0 1.29008 68.5501 -18.0385)" id="svg_93">last</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-60.6968 123.928 57.1471) matrix(0.846919 0 0 1.29008 76.3284 -21.9207)" id="svg_124">year,</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(60.011 130.362 58.1503) matrix(0.846919 0 0 1.29008 82.7693 -20.9175)" id="svg_127">he</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(0.48655 139.143 60.0294) matrix(0.846919 0 0 1.29008 91.5501 -19.0384)" id="svg_128">changed</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(0.48655 152.149 60.0294) matrix(0.846919 0 0 1.29008 104.55 -19.0384)" id="svg_129">the</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-60.6968 159.927 56.1453) matrix(0.846919 0 0 1.29008 112.328 -22.9225)" id="svg_130">game.</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(60.011 166.362 57.1497) matrix(0.846919 0 0 1.29008 118.769 -21.9181)" id="svg_131">Of</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(0.48655 175.149 59.0294) matrix(0.846919 0 0 1.29008 127.55 -20.0384)" id="svg_133">course</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(0.48655 190.149 60.0294) matrix(0.846919 0 0 1.29008 142.55 -19.0384)" id="svg_134">I came</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-60.6968 198.924 56.1517) matrix(0.846919 0 0 1.29008 151.331 -22.9161)" id="svg_135">back</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(60.011 206.365 57.1563) matrix(0.846919 0 0 1.29008 158.766 -21.9115)" id="svg_136">with</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(0.48655 218.143 60.0293) matrix(0.846919 0 0 1.29008 170.55 -19.0385)" id="svg_146">Christmas</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-65.709 39.9247 73.1519) matrix(0.846919 0 0 1.29008 -7.66819 -5.91585)" id="svg_147">Godzilla.</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(67.8164 50.452 77.3593) matrix(0.83415 0 0 1.23082 3.57666 1.94268)" id="svg_148">thought</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-53.1927 55.5853 74.8922) matrix(0.856194 0 0 1.13733 7.47118 5.23073)" id="svg_149">he&#x27;d</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(63.1349 64.8807 72.8713) matrix(0.785998 0 0 1.33165 20.7113 -8.74427)" id="svg_150">me beat</text>
-  <text fill="#007fff" class="strokeClassa8a6a6" stroke-width="0" stroke-dasharray="2,2" stroke-linejoin="null" stroke-linecap="null" stroke-opacity="null" fill-opacity="null" x="63" y="61" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" id="svg_152" transform="matrix(1 0 0 1 20 20)"/>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-1.01755 44.6281 79.256) matrix(0.915303 0 0 1.20181 -6.81475 5.60756)" id="svg_153">He</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-1.01755 60.722 78.099) matrix(0.781887 0 0 1.4259 16.7836 -9.3265)" id="svg_154">had</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-59.098 79.9281 71.1462) matrix(0.846919 0 0 1.29008 32.3286 -7.92159)" id="svg_157">the year</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(59.9629 88.7228 74.4592) matrix(0.770286 0 0 1.07944 45.4303 8.09891)" id="svg_158">when he</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-54.8676 96.5852 74.8922) matrix(0.856194 0 0 1.13733 48.4711 5.23074)" id="svg_159">added</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(63.1349 104.881 70.8707) matrix(0.785998 0 0 1.33165 60.7115 -10.7448)" id="svg_160">sleigh on</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-1.01755 83.632 78.9738) matrix(0.710922 0 0 1.11358 43.676 10.5147)" id="svg_161">before</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-1.01755 101.728 77.0989) matrix(0.781887 0 0 1.4259 57.7836 -10.3266)" id="svg_162">the</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-59.098 117.925 70.1524) matrix(0.846919 0 0 1.29008 70.3321 -8.9154)" id="svg_165" style="cursor: move;">the roof,</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(67.8164 124.723 76.4591) matrix(0.770286 0 0 1.07944 81.4305 10.0988)" id="svg_166">I pointed</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-53.1927 128.589 74.8866) matrix(0.856194 0 0 1.13733 80.4683 5.22509)" id="svg_167">out</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(63.1349 137.912 72.8617) matrix(0.659558 0 0 1.33165 100.848 -8.73309)" id="svg_168">the &quot;reindeer&quot;</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-1.01755 117.628 78.256) matrix(0.915303 0 0 1.20181 66.1852 4.60756)" id="svg_169">until</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-1.01755 133.722 78.099) matrix(0.781887 0 0 1.4259 89.7836 -9.3265)" id="svg_170">that</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-59.098 152.928 69.1452) matrix(0.846919 0 0 1.29008 105.329 -9.92256)" id="svg_173" style="cursor: move;">pulling</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(61.8413 161.426 73.3503) matrix(0.923664 0 0 1.23262 109.513 -2.19581)" id="svg_174">was in</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-53.1927 166.589 71.8873) matrix(0.856194 0 0 1.13733 118.468 2.2258)" id="svg_175">fact</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(63.1349 171.884 67.8751) matrix(0.785998 0 0 1.33165 127.708 -13.7405)" id="svg_176">moose.</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-1.01755 156.621 75.2561) matrix(0.915303 0 0 1.20181 105.185 1.60769)" id="svg_177">it</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-1.01755 169.722 75.099) matrix(0.781887 0 0 1.4259 125.784 -12.3265)" id="svg_178">a</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-59.098 189.928 70.1458) matrix(0.846919 0 0 1.29008 142.329 -8.92203)" id="svg_181" style="cursor: move;">A moose</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(67.8164 199.72 71.4559) matrix(0.770286 0 0 1.07944 156.434 5.09559)" id="svg_182">do a</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-53.1927 204.589 73.8873) matrix(0.856194 0 0 1.13733 156.468 4.22579)" id="svg_183">better</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(63.1349 213.883 70.8768) matrix(0.785998 0 0 1.33165 169.708 -10.7388)" id="svg_184" style="cursor: move;">he said,</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-1.01755 194.124 77.432) matrix(0.658375 0 0 1.02684 157.126 14.3295)" id="svg_185">would</text>
-  <text fill="#007fff" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-1.01755 209.729 76.0989) matrix(0.781887 0 0 1.4259 165.784 -11.3266)" id="svg_186">job,</text>
+  <!-- blue lights -->
+  <text fill="#007fff" class="blueStar1 strokeClass000000" stroke-width="0" x="56.2" y="63" id="svg_34" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="matrix(1 0 0 1 -17 0)">When </text>
+  <text fill="#007fff" class="blueStar2 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-67.1474 48.7926 58.0272) matrix(1.03702 0 0 1.4259 -9.4912 -29.4428)" id="svg_41">Pedro</text>
+  <text fill="#007fff" class="blueStar3 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(62.4742 56.6499 59.0378) matrix(1.03702 0 0 1.4259 -1.63383 -28.4323)" id="svg_42">put</text>
+  <text fill="#007fff" class="blueStar1 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-1.01755 65.7281 61.0988) matrix(0.781887 0 0 1.4259 21.7836 -26.3267)" id="svg_51">up the</text>
+  <text fill="#007fff" class="blueStar2 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(0.141038 81.1414 60.0178) matrix(0.846919 0 0 1.29008 33.5485 -19.05)" id="svg_77">abomi</text>
+  <text fill="#007fff" class="blueStar3 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" id="svg_90" transform="rotate(-60.6968 89.9277 57.1466) matrix(0.846919 0 0 1.29008 42.3282 -21.9212)">nable</text>
+  <text fill="#007fff" class="blueStar1 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" id="svg_91" transform="rotate(60.011 97.3624 59.1497) matrix(0.846919 0 0 1.29008 49.7695 -19.9181)">snow</text>
+  <text fill="#007fff" class="blueStar2 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" id="svg_92" transform="rotate(0.48655 105.15 60.0294) matrix(0.846919 0 0 1.29008 57.5501 -19.0384)">man</text>
+  <text fill="#007fff" class="blueStar3 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(0.48655 116.143 61.0293) matrix(0.846919 0 0 1.29008 68.5501 -18.0385)" id="svg_93">last</text>
+  <text fill="#007fff" class="blueStar1 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-60.6968 123.928 57.1471) matrix(0.846919 0 0 1.29008 76.3284 -21.9207)" id="svg_124">year,</text>
+  <text fill="#007fff" class="blueStar2 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(60.011 130.362 58.1503) matrix(0.846919 0 0 1.29008 82.7693 -20.9175)" id="svg_127">he</text>
+  <text fill="#007fff" class="blueStar3 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(0.48655 139.143 60.0294) matrix(0.846919 0 0 1.29008 91.5501 -19.0384)" id="svg_128">changed</text>
+  <text fill="#007fff" class="blueStar1 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(0.48655 152.149 60.0294) matrix(0.846919 0 0 1.29008 104.55 -19.0384)" id="svg_129">the</text>
+  <text fill="#007fff" class="blueStar2 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-60.6968 159.927 56.1453) matrix(0.846919 0 0 1.29008 112.328 -22.9225)" id="svg_130">game.</text>
+  <text fill="#007fff" class="blueStar3 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(60.011 166.362 57.1497) matrix(0.846919 0 0 1.29008 118.769 -21.9181)" id="svg_131">Of</text>
+  <text fill="#007fff" class="blueStar1 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(0.48655 175.149 59.0294) matrix(0.846919 0 0 1.29008 127.55 -20.0384)" id="svg_133">course</text>
+  <text fill="#007fff" class="blueStar2 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(0.48655 190.149 60.0294) matrix(0.846919 0 0 1.29008 142.55 -19.0384)" id="svg_134">I came</text>
+  <text fill="#007fff" class="blueStar3 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-60.6968 198.924 56.1517) matrix(0.846919 0 0 1.29008 151.331 -22.9161)" id="svg_135">back</text>
+  <text fill="#007fff" class="blueStar1 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(60.011 206.365 57.1563) matrix(0.846919 0 0 1.29008 158.766 -21.9115)" id="svg_136">with</text>
+  <text fill="#007fff" class="blueStar2 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(0.48655 218.143 60.0293) matrix(0.846919 0 0 1.29008 170.55 -19.0385)" id="svg_146">Christmas</text>
+  <text fill="#007fff" class="blueStar3 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-65.709 39.9247 73.1519) matrix(0.846919 0 0 1.29008 -7.66819 -5.91585)" id="svg_147">Godzilla.</text>
+  <text fill="#007fff" class="blueStar1 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(67.8164 50.452 77.3593) matrix(0.83415 0 0 1.23082 3.57666 1.94268)" id="svg_148">thought</text>
+  <text fill="#007fff" class="blueStar2 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-53.1927 55.5853 74.8922) matrix(0.856194 0 0 1.13733 7.47118 5.23073)" id="svg_149">he&#x27;d</text>
+  <text fill="#007fff" class="blueStar3 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(63.1349 64.8807 72.8713) matrix(0.785998 0 0 1.33165 20.7113 -8.74427)" id="svg_150">me beat</text>
+  <text fill="#007fff" class="blueStar1 strokeClassa8a6a6" stroke-width="0" stroke-dasharray="2,2" stroke-linejoin="null" stroke-linecap="null" stroke-opacity="null" fill-opacity="null" x="63" y="61" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" id="svg_152" transform="matrix(1 0 0 1 20 20)"/>
+  <text fill="#007fff" class="blueStar2 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-1.01755 44.6281 79.256) matrix(0.915303 0 0 1.20181 -6.81475 5.60756)" id="svg_153">He</text>
+  <text fill="#007fff" class="blueStar3 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-1.01755 60.722 78.099) matrix(0.781887 0 0 1.4259 16.7836 -9.3265)" id="svg_154">had</text>
+  <text fill="#007fff" class="blueStar1 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-59.098 79.9281 71.1462) matrix(0.846919 0 0 1.29008 32.3286 -7.92159)" id="svg_157">the year</text>
+  <text fill="#007fff" class="blueStar2 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(59.9629 88.7228 74.4592) matrix(0.770286 0 0 1.07944 45.4303 8.09891)" id="svg_158">when he</text>
+  <text fill="#007fff" class="blueStar3 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-54.8676 96.5852 74.8922) matrix(0.856194 0 0 1.13733 48.4711 5.23074)" id="svg_159">added</text>
+  <text fill="#007fff" class="blueStar1 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(63.1349 104.881 70.8707) matrix(0.785998 0 0 1.33165 60.7115 -10.7448)" id="svg_160">sleigh on</text>
+  <text fill="#007fff" class="blueStar2 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-1.01755 83.632 78.9738) matrix(0.710922 0 0 1.11358 43.676 10.5147)" id="svg_161">before</text>
+  <text fill="#007fff" class="blueStar3 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-1.01755 101.728 77.0989) matrix(0.781887 0 0 1.4259 57.7836 -10.3266)" id="svg_162">the</text>
+  <text fill="#007fff" class="blueStar1 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-59.098 117.925 70.1524) matrix(0.846919 0 0 1.29008 70.3321 -8.9154)" id="svg_165" style="cursor: move;">the roof,</text>
+  <text fill="#007fff" class="blueStar2 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(67.8164 124.723 76.4591) matrix(0.770286 0 0 1.07944 81.4305 10.0988)" id="svg_166">I pointed</text>
+  <text fill="#007fff" class="blueStar3 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-53.1927 128.589 74.8866) matrix(0.856194 0 0 1.13733 80.4683 5.22509)" id="svg_167">out</text>
+  <text fill="#007fff" class="blueStar1 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(63.1349 137.912 72.8617) matrix(0.659558 0 0 1.33165 100.848 -8.73309)" id="svg_168">the &quot;reindeer&quot;</text>
+  <text fill="#007fff" class="blueStar2 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-1.01755 117.628 78.256) matrix(0.915303 0 0 1.20181 66.1852 4.60756)" id="svg_169">until</text>
+  <text fill="#007fff" class="blueStar3 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-1.01755 133.722 78.099) matrix(0.781887 0 0 1.4259 89.7836 -9.3265)" id="svg_170">that</text>
+  <text fill="#007fff" class="blueStar1 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-59.098 152.928 69.1452) matrix(0.846919 0 0 1.29008 105.329 -9.92256)" id="svg_173" style="cursor: move;">pulling</text>
+  <text fill="#007fff" class="blueStar2 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(61.8413 161.426 73.3503) matrix(0.923664 0 0 1.23262 109.513 -2.19581)" id="svg_174">was in</text>
+  <text fill="#007fff" class="blueStar3 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-53.1927 166.589 71.8873) matrix(0.856194 0 0 1.13733 118.468 2.2258)" id="svg_175">fact</text>
+  <text fill="#007fff" class="blueStar1 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(63.1349 171.884 67.8751) matrix(0.785998 0 0 1.33165 127.708 -13.7405)" id="svg_176">moose.</text>
+  <text fill="#007fff" class="blueStar2 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-1.01755 156.621 75.2561) matrix(0.915303 0 0 1.20181 105.185 1.60769)" id="svg_177">it</text>
+  <text fill="#007fff" class="blueStar3 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-1.01755 169.722 75.099) matrix(0.781887 0 0 1.4259 125.784 -12.3265)" id="svg_178">a</text>
+  <text fill="#007fff" class="blueStar1 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-59.098 189.928 70.1458) matrix(0.846919 0 0 1.29008 142.329 -8.92203)" id="svg_181" style="cursor: move;">A moose</text>
+  <text fill="#007fff" class="blueStar2 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(67.8164 199.72 71.4559) matrix(0.770286 0 0 1.07944 156.434 5.09559)" id="svg_182">do a</text>
+  <text fill="#007fff" class="blueStar3 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-53.1927 204.589 73.8873) matrix(0.856194 0 0 1.13733 156.468 4.22579)" id="svg_183">better</text>
+  <text fill="#007fff" class="blueStar1 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(63.1349 213.883 70.8768) matrix(0.785998 0 0 1.33165 169.708 -10.7388)" id="svg_184" style="cursor: move;">he said,</text>
+  <text fill="#007fff" class="blueStar2 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-1.01755 194.124 77.432) matrix(0.658375 0 0 1.02684 157.126 14.3295)" id="svg_185">would</text>
+  <text fill="#007fff" class="blueStar3 strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-1.01755 209.729 76.0989) matrix(0.781887 0 0 1.4259 165.784 -11.3266)" id="svg_186">job,</text>
+  <!-- candles -->
   <text fill="#ff7f00" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-91.7228 53.1951 114.25) matrix(1 0 0 1 -3.00021 53)" id="svg_187">like</text>
   <text fill="#ff7f00" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-91.7228 92.1951 115.25) matrix(1 0 0 1 35.9998 54)" id="svg_188">that</text>
   <text fill="#ff7f00" class="strokeClass000000" stroke-width="0" x="56.2" y="63" font-size="5" font-family="Serif" text-anchor="middle" xml:space="preserve" transform="rotate(-91.7228 127.195 114.25) matrix(1 0 0 1 70.9996 53)" id="svg_189">was</text>
@@ -691,8 +739,8 @@ function disableGlow(){
 <br>
 <button id="leftarrow" onclick="leftarrow();"> &leftarrow;</button>
 <button id="rightarrow" onclick="rightarrow();""> &rightarrow;</button>
-<button id="stop" onclick="disableGlow();"> &#128997</button>
-<button id="start" onclick="enableGlow();" style="color:green"> &rightarrow;</button>
+<button id="stop" onclick="disableGlow();"> Read</button>
+<button id="start" onclick="enableGlow();" style="color:green"> Glow</button>
 
 </body>
 </html>
