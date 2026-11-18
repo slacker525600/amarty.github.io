@@ -12,7 +12,7 @@ body {
   background: linear-gradient(135deg, #ffd000 0%, #ff4500 50%, #c40000 100%);
   color: #ffffff;
   display: grid;
-  grid-template-rows: 1fr 1fr 3fr;
+  grid-template-rows: 1fr .5fr 6fr;
   grid-template-columns: 1fr 3fr ;
 }
 
@@ -64,22 +64,21 @@ body {
 
 .top-links {
   display: flex;
-  gap: 20px;
+  gap: 5px;
 }
 
 .top-links a {
   color: #ffffff;
   text-decoration: none;
   font-weight: 500;
-  padding: 8px 12px;
-  border-radius: 4px;
+  padding: 4px 6px;
+  border-radius: 2px;
   transition: background-color 0.2s ease;
 }
 
 .top-links a:hover {
   background-color: rgba(255, 255, 255, 0.2);
 }
-
 
 .sidebar-menu,
 .submenu {
