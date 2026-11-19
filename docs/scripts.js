@@ -13,12 +13,9 @@ function populateMenuLinks(links) {
 
 document.addEventListener('DOMContentLoaded', () => {
   populateMenuLinks([
-    { text: 'Home', href: 'index.html' },
-    { text: 'About', href: 'about.html' },
-    { text: 'Writings', href: 'writings.html' },
-    { text: 'Links', href: 'links.html' },
-    { text: 'Unpublished', href: 'unpublished.html' },
-    { text: 'Visual Art', href: 'art.html' },
-    { text: 'Digital Art', href: 'digital_art.html' }
+    { text: 'Fiction', href: 'index.html' },
+    { text: 'Nonfiction', href: 'about.html' },
+    { text: 'Multimedia', href: 'writings.html' },
+    { text: 'Contact', href: 'links.html' },
   ]);
 });
