@@ -129,19 +129,19 @@ function enableGlow(){
   blurEffect.setAttribute('stdDeviation', '6');
 
   var svgAnimator = document.getElementById('glowAnimateFast');
-  svgAnimator.setAttribute('values', '0; 10; 0');
+  svgAnimator.setAttribute('values', '0; 5; 0');
   svgAnimator.beginElement();
 
   var svgAnimator = document.getElementById('glowAnimateMedium');
-  svgAnimator.setAttribute('values', '0; 10; 0');
+  svgAnimator.setAttribute('values', '0; 5; 0');
   svgAnimator.beginElement();
 
   var svgAnimator = document.getElementById('glowAnimateSlow');
-  svgAnimator.setAttribute('values', '0; 10; 0');
+  svgAnimator.setAttribute('values', '0; 5; 0');
   svgAnimator.beginElement();
  
   var svgAnimator = document.getElementById('glowAnimateSteady');
-  svgAnimator.setAttribute('values', '2; 3; 2');
+  svgAnimator.setAttribute('values', '1; 2; 1');
   svgAnimator.beginElement();
 }
 
@@ -255,7 +255,7 @@ function disableGlow(){
   text.strokeClasse5bd44, text.strokeClassff0000, text.strokeClasse0d9d9, text.strokeClasse5d7d7,
   text.strokeClassa8a6a6, text.strokeClassf9f2f2, text.strokeClassa56224, text.strokeClass000000,
   text.strokeClassad2a1b, text.strokeClasse07c1f, text.strokeClasse5d7d7, text.strokeClass961515, 
-  text.strokeClassccc5c5, text.strokeClass7fff00, 
+  text.strokeClassccc5c5, text.strokeClass7fff00, text.strokeClassccc9c9,
   g path.steadyGlow, .steadyGlow {
     filter: url(#glowSteady);
   }
@@ -284,11 +284,11 @@ function disableGlow(){
       <filter id="glowFast" x="-20%" y="-20%" width="140%" height="140%">
       <!-- Blur the line -->
       <!-- I want each text selector to get a glow in and out effect, that can be stopped -->
-        <feGaussianBlur id="blurEffectFast" stdDeviation="6" result="blur" >
+        <feGaussianBlur id="blurEffectFast" result="blur" >
           <animate 
             id="glowAnimateFast"
             attributeName="stdDeviation" 
-            values="0; 10; 0" 
+            values="0; 5; 0" 
             dur="1.5s" 
             repeatCount="indefinite" />
         </feGaussianBlur>
@@ -304,11 +304,11 @@ function disableGlow(){
       <filter id="glowMedium" x="-20%" y="-20%" width="140%" height="140%">
       <!-- Blur the line -->
       <!-- I want each text selector to get a glow in and out effect, that can be stopped -->
-        <feGaussianBlur id="blurEffectMedium" stdDeviation="6" result="blur" >
+        <feGaussianBlur id="blurEffectMedium" result="blur" >
           <animate 
             id="glowAnimateMedium"
             attributeName="stdDeviation" 
-            values="1; 3; 1" 
+            values="0; 5; 0" 
             dur="2.5s" 
             repeatCount="indefinite" />
         </feGaussianBlur>
@@ -324,11 +324,11 @@ function disableGlow(){
       <filter id="glowSlow" x="-20%" y="-20%" width="140%" height="140%">
       <!-- Blur the line -->
       <!-- I want each text selector to get a glow in and out effect, that can be stopped -->
-        <feGaussianBlur id="blurEffectSlow" stdDeviation="6" result="blur" >
+        <feGaussianBlur id="blurEffectSlow" result="blur" >
           <animate 
             id="glowAnimateSlow"
             attributeName="stdDeviation" 
-            values="0; 10; 0" 
+            values="0; 5; 0" 
             dur="4s" 
             repeatCount="indefinite" />
         </feGaussianBlur>
@@ -343,11 +343,11 @@ function disableGlow(){
       <filter id="glowSteady" x="-20%" y="-20%" width="140%" height="140%">
       <!-- Blur the line -->
       <!-- I want each text selector to get a glow in and out effect, that can be stopped -->
-        <feGaussianBlur id="blurEffectSteady" stdDeviation="6" result="blur" >
+        <feGaussianBlur id="blurEffectSteady" result="blur" >
           <animate 
             id="glowAnimateSteady"
             attributeName="stdDeviation" 
-            values="2.5; 3.5; 2.5" 
+            values="1; 2; 1" 
             dur="4s" 
             repeatCount="indefinite" />
         </feGaussianBlur>
